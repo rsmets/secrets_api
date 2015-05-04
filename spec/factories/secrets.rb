@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :secret do
-    title { FFaker::Product.product_name }
+    title { FFaker::Lorem.sentence }
 	published false
 	description "My secret..."
-  	user_id "1"
+  	user
   end
 
 end

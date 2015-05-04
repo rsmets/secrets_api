@@ -5,6 +5,7 @@ describe User do
 
   subject { @user }
 
+  it { should have_many(:secrets) }
   it { should respond_to(:email) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
@@ -35,4 +36,21 @@ describe User do
       expect(@user.auth_token).not_to eql existing_user.auth_token
     end
   end
+
+  describe "#secrets association" do
+
+    before do
+      @user.save
+      3.times { FactoryGirl.create :secret, user: @user }
+    end
+
+    it "destroys the associated secret on self destruct" do
+      secrets = @user.secrets
+      @user.destroy
+      secrets.each do |secret|
+        expect(Secret.find(secret)).to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
 end
