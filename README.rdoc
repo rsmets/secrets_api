@@ -1,3 +1,8 @@
 == README
 
 Following http://apionrails.icalialabs.com/book/ tutorial to create a secrets api.
+
+Things I would improve uppon give more time:
+
+Serialize the data.
+Implementing caching and pagination.
