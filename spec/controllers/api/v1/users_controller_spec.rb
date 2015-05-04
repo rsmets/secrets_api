@@ -5,6 +5,18 @@ describe Api::V1::UsersController do
 
   before(:each) { request.headers['Content-Type'] = Mime::JSON.to_s }
 
+  describe "DELETE #destroy" do
+
+    before(:each) do
+      @user = FactoryGirl.create :user
+      sign_in @user, store: false
+      delete :destroy, id: @user.auth_token
+    end
+
+    it { should respond_with 204 }
+
+  end
+
   describe "GET #show" do
     before(:each) do
       @user = FactoryGirl.create :user
@@ -62,8 +74,7 @@ describe Api::V1::UsersController do
     context "when is successfully updated" do
       before(:each) do
         @user = FactoryGirl.create :user
-        patch :update, { id: @user.id,
-                         user: { email: "newmail@example.com" } }, format: :json
+        request.headers['Authorization'] =  @user.auth_token
       end
 
       it "renders the json representation for the updated user" do
@@ -98,6 +109,7 @@ describe Api::V1::UsersController do
   describe "DELETE #destroy" do
   before(:each) do
     @user = FactoryGirl.create :user
+    api_authorization_header @user.auth_token
     delete :destroy, { id: @user.id }, format: :json
   end
 
